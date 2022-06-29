@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:se_project/pages/keys.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,6 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailid = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +23,11 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               child: Text("Password Less Authentication System"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
+              controller: emailid,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(width: 2),
@@ -31,11 +35,13 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Enter Email',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('emailId', emailid.text);
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (c) => Keys()));
                 },
